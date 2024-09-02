@@ -1,0 +1,16 @@
+{
+  "name": "api_recipe",
+  "version": "1.0.0",
+  "description": "this is for api endpoint",
+  "main": "api_recipe.js",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "nodemon api_recipe.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
+  }
+}
