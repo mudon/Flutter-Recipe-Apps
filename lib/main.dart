@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/change_notifiers/registration_controller.dart';
@@ -9,12 +10,13 @@ import 'package:recipe_project/presentation_layer/ui/recipe_main_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_register_ui.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
