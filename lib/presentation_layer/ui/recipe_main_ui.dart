@@ -35,6 +35,7 @@ class _MainPageViewState extends State<MainPageView> {
   Timer? _timer;
   List<int> likeCount = [];
   List<bool> isLiked = [];
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -66,6 +67,12 @@ class _MainPageViewState extends State<MainPageView> {
           curve: Curves.easeInOut,
         );
       }
+    });
+  }
+
+  void onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
     });
   }
 
@@ -389,6 +396,25 @@ class _MainPageViewState extends State<MainPageView> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'School',
+          ),
+        ],
+        currentIndex: selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: onItemTapped,
       ),
     );
   }
