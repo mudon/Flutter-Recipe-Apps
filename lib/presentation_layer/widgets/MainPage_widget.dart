@@ -273,28 +273,34 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                 child: Text(state.filteredRecipes[index].name),
                               ),
                               Spacer(),
-                              Row(children: [
-                                Icon(
-                                  Icons.favorite,
-                                  color: Colors.grey.shade400,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 3.0),
-                                  child: Text(
-                                    '${likeCount[index]}',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 23,
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Wrap(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.favorite,
+                                          color: Colors.grey.shade400,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 3.0),
+                                          child: Text(
+                                            '${likeCount[index]}',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 23,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Icon(
-                                    Icons.bookmark,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
-                              ]),
+                                    Spacer(),
+                                    Icon(
+                                      Icons.bookmark,
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ]),
                             ],
                           ),
                         ),
