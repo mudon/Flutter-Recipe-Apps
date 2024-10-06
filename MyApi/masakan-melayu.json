@@ -1,0 +1,60 @@
+[
+    {
+        "name": "Ayam Masak Halia",
+        "bahan": {
+            "Bahan-bahan": [
+                "500 gram ayam, potong kecil",
+                "4 ulas bawang putih, hiris nipis",
+                "2 cm halia, dihiris halus memanjang",
+                "1 sudu besar kicap cair",
+                "1 sudu besar sos tiram",
+                "1 biji bawang besar, hiris nipis membulat",
+                "1 biji cili merah, hiris nipis",
+                "1 tangkai daun bawang, hiris panjang 2cm cm",
+                "1 1/2 sudu kecil tepung jagung, bancuh dengan sedikit air",
+                "minyak masak, untuk goreng ayam",
+                "sedikit lada sulah atau lada hitam",
+                "sedikit garam dan kunyit"
+            ]
+        },
+        "penyediaan": {
+            "Penyediaan": [
+                "Panaskan minyak. Gaul ayam bersama garam dan kunyit kemudian goreng separuh masak. Angkat dan ketepikan.",
+                "Ambil sedikit minyak dari baki gorengan ayam tadi anggaran 1/2 senduk dan tumis bawang putih bersama halia sehingga naik bau. Masukkan kembali ayam yang digoreng separuh masak tadi..",
+                "Masukkan pula sos tiram, kicap cair, dan sedikit taburan lada putih. Kacau seketika (jaga jangan sampai bawang putih hangus).",
+                "Masukkan air bancuhan tepung jagung dan kacau sehingga kuah menjadi sebati dan pekat. Tambah sedikit lagi air jika anda suka lebih kuah.",
+                "Taburkan dengan cili merah dan bawang besar dan kacau selama 2-3 minit sebelum diangkat. Perasakan dengan garam dan gula secukup rasa.",
+                "Angkat dan tabur dengan daun bawangdan. Hidangkan bersama nasi panas."
+            ]
+        }
+    },
+    {
+        "name": "Ayam asd",
+        "bahan": {
+            "Bahan-bahan": [
+                "500 gram ayam, potong kecil",
+                "4 ulas bawang putih, hiris nipis",
+                "2 cm halia, dihiris halus memanjang",
+                "1 sudu besar kicap cair",
+                "1 sudu besar sos tiram",
+                "1 biji bawang besar, hiris nipis membulat",
+                "1 biji cili merah, hiris nipis",
+                "1 tangkai daun bawang, hiris panjang 2cm cm",
+                "1 1/2 sudu kecil tepung jagung, bancuh dengan sedikit air",
+                "minyak masak, untuk goreng ayam",
+                "sedikit lada sulah atau lada hitam",
+                "sedikit garam dan kunyit"
+            ]
+        },
+        "penyediaan": {
+            "Penyediaan": [
+                "Panaskan minyak. Gaul ayam bersama garam dan kunyit kemudian goreng separuh masak. Angkat dan ketepikan.",
+                "Ambil sedikit minyak dari baki gorengan ayam tadi anggaran 1/2 senduk dan tumis bawang putih bersama halia sehingga naik bau. Masukkan kembali ayam yang digoreng separuh masak tadi..",
+                "Masukkan pula sos tiram, kicap cair, dan sedikit taburan lada putih. Kacau seketika (jaga jangan sampai bawang putih hangus).",
+                "Masukkan air bancuhan tepung jagung dan kacau sehingga kuah menjadi sebati dan pekat. Tambah sedikit lagi air jika anda suka lebih kuah.",
+                "Taburkan dengan cili merah dan bawang besar dan kacau selama 2-3 minit sebelum diangkat. Perasakan dengan garam dan gula secukup rasa.",
+                "Angkat dan tabur dengan daun bawangdan. Hidangkan bersama nasi panas."
+            ]
+        }
+    }
+]

@@ -4,6 +4,7 @@ import 'package:recipe_project/data_layer/repo/recipe_list_repo.dart';
 class RecipeListToMap {
   static Future<List<RecipeInstance>> recipeListMap() async {
     List<dynamic> recipeListInJson = await RecipeListRepo.getRecipeList();
+    print("recipeListInJson $recipeListInJson");
     List<RecipeInstance> recipeInstances = recipeListInJson
         .map((recipeJson) => RecipeInstance.fromMap(recipeJson))
         .toList();
