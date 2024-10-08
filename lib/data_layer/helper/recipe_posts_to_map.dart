@@ -7,8 +7,6 @@ class PostsListToMap {
     List<PostModel> postsInstance =
         (postsMap ?? []).map((post) => PostModel.fromMap(post)).toList();
 
-    print(postsInstance[0].postLists);
-
     return postsInstance;
   }
 }

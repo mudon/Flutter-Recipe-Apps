@@ -9,6 +9,7 @@ import 'package:recipe_project/domain_layer/bloc/recipe_fetch_bloc.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
+import 'package:recipe_project/presentation_layer/widgets/icon_button_recipe.dart';
 
 class MainpageWidget extends StatefulWidget {
   const MainpageWidget({super.key});
@@ -37,6 +38,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
   Timer? _timer;
   List<int> likeCount = [];
   List<bool> isLiked = [];
+  List<bool> bookmarkCount = List.filled(20, false);
 
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
@@ -81,6 +83,21 @@ class _MainpageWidgetState extends State<MainpageWidget> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text("Hiii 👋🏻"), Text("Muhammad Hazim")],
+                ),
+                CircleAvatar()
+              ],
+            ),
+          ),
+        ),
         SliverAppBar(
           expandedHeight: 70.0,
           floating: true,
@@ -133,7 +150,6 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                 child: Center(child: CircularProgressIndicator()),
               );
             } else if (state is RecipeLoaded) {
-              // Initialize PageController only if it's not in searching state
               if (!state.isSearching && _pageController == null) {
                 _pageController = PageController();
               } else if (state.isSearching && _pageController != null) {
@@ -277,18 +293,17 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Wrap(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.favorite,
-                                          color: Colors.grey.shade400,
-                                        ),
+                                    Row(
+                                      children: [
+                                        IconButtonRecipe(
+                                            isSelected: isLiked[index],
+                                            iconBefore: Icons.favorite_border,
+                                            iconAfter: Icons.favorite),
                                         Container(
-                                          margin: EdgeInsets.only(left: 3.0),
+                                          // margin: EdgeInsets.only(left: 3.0),
                                           child: Text(
                                             '${likeCount[index]}',
                                             style: TextStyle(
-                                              color: Colors.grey,
                                               fontSize: 23,
                                             ),
                                           ),
@@ -296,10 +311,10 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                       ],
                                     ),
                                     Spacer(),
-                                    Icon(
-                                      Icons.bookmark,
-                                      color: Colors.grey.shade400,
-                                    ),
+                                    IconButtonRecipe(
+                                        isSelected: bookmarkCount[index],
+                                        iconBefore: Icons.bookmark_border,
+                                        iconAfter: Icons.bookmark)
                                   ]),
                             ],
                           ),

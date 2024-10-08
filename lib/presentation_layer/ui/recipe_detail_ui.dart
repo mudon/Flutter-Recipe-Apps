@@ -1,4 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/helper/recipe_posts_to_map.dart';
 import 'package:recipe_project/data_layer/models/list_of_recipe.dart';
 
@@ -15,6 +20,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late Map<String, List<String>> penyediaan;
   late String? laluanGambar;
   late String? name;
+  List<String> dummyComments = ["sedap ke makanan ni"];
+  TextEditingController commentController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -180,8 +187,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
             ),
             SliverToBoxAdapter(
               child: Row(children: [
-                Container(
-                  width: 250,
+                Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(left: 10.0),
                     child: TextFormField(
@@ -195,16 +201,72 @@ class _RecipeDetailState extends State<RecipeDetail> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
+                      controller: commentController,
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.arrow_upward), // Choose the icon you want
+                IconButton.filledTonal(
+                  icon: Icon(Icons.arrow_upward),
+                  color: recipeColor.primary,
                   onPressed: () {
-                    PostsListToMap.postsListMap();
+                    dummyComments.add(commentController.text);
+                    print(dummyComments);
                   },
                 ),
               ]),
+            ),
+            SliverToBoxAdapter(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: dummyComments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Muhammad Hazim",
+                                          style: TextStyle(fontSize: 25),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "12 min",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      dummyComments[index],
+                                    )
+                                  ],
+                                )),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
             )
           ],
         ),

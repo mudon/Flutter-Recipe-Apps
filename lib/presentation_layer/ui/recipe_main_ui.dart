@@ -10,7 +10,7 @@ import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_user_saved_ui.dart';
-import 'package:recipe_project/presentation_layer/widgets/MainPage_widget.dart';
+import 'package:recipe_project/presentation_layer/widgets/main_page_widget.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
