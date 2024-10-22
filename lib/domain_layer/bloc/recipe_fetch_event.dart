@@ -10,3 +10,7 @@ class SearchRecipe extends RecipeEvent {
   bool? isIndex;
   SearchRecipe(this.query, this.isIndex);
 }
+
+class GetPosts extends RecipeEvent {
+  GetPosts();
+}

@@ -10,6 +10,7 @@ import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_user_saved_ui.dart';
+import 'package:recipe_project/presentation_layer/ui/recipe_wheeler_ui.dart';
 import 'package:recipe_project/presentation_layer/widgets/main_page_widget.dart';
 
 class MainPage extends StatelessWidget {
@@ -46,7 +47,8 @@ class _MainPageViewState extends State<MainPageView> {
 
   List<Widget> navigationPage = [
     const MainpageWidget(),
-    const userSavedRecipe()
+    const userSavedRecipe(),
+    const Wheeler(),
   ];
 
   void onItemTapped(int index) {
@@ -67,7 +69,11 @@ class _MainPageViewState extends State<MainPageView> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark),
-            label: 'Business',
+            label: 'Saved',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.repeat_on_outlined),
+            label: 'Spinner',
           ),
         ],
         currentIndex: selectedIndex,

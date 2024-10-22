@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/helper/recipe_posts_to_map.dart';
 import 'package:recipe_project/data_layer/models/list_of_recipe.dart';
 
 class RecipeDetail extends StatefulWidget {
@@ -20,7 +19,15 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late Map<String, List<String>> penyediaan;
   late String? laluanGambar;
   late String? name;
-  List<String> dummyComments = ["sedap ke makanan ni"];
+  List<Map<String, String>> dummyComments = [
+    {"name": "Muhammad Hazim", "timestamp": "12 min", "comment": "sedapnyaa"},
+    {"name": "John Doe", "timestamp": "5 min", "comment": "Great post!"},
+    {
+      "name": "Jane Smith",
+      "timestamp": "1 hr",
+      "comment": "I agree with this."
+    },
+  ]; //remember to change
   TextEditingController commentController = TextEditingController();
   @override
   void initState() {
@@ -209,7 +216,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   icon: Icon(Icons.arrow_upward),
                   color: recipeColor.primary,
                   onPressed: () {
-                    dummyComments.add(commentController.text);
+                    dummyComments.add({
+                      "name": "maybe",
+                      "timestamp": "example",
+                      "comment": "comment"
+                    });
                     print(dummyComments);
                   },
                 ),
@@ -220,6 +231,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   shrinkWrap: true,
                   itemCount: dummyComments.length,
                   itemBuilder: (BuildContext context, int index) {
+                    final comment = dummyComments[index];
                     return Padding(
                       padding: EdgeInsets.all(10),
                       child: Row(
@@ -242,14 +254,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     Row(
                                       children: [
                                         Text(
-                                          "Muhammad Hazim",
+                                          comment["name"]!,
                                           style: TextStyle(fontSize: 25),
                                         ),
                                         SizedBox(
                                           width: 10,
                                         ),
                                         Text(
-                                          "12 min",
+                                          comment["timestamps"]!,
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -258,7 +270,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                       ],
                                     ),
                                     Text(
-                                      dummyComments[index],
+                                      comment["comment"]!,
                                     )
                                   ],
                                 )),
