@@ -1,13 +1,13 @@
 // ignore_for_file: unused_field
 
-class RecipeInstance {
+class Recipe {
   final String name;
   String? _namaSamaran;
   String? _laluanGambar;
   final Map<String, List<String>> bahan;
   final Map<String, List<String>> penyediaan;
 
-  RecipeInstance({
+  Recipe({
     required this.name,
     String? laluanGambar,
     required this.bahan,
@@ -25,8 +25,8 @@ class RecipeInstance {
         value != null ? 'http://10.0.2.2:3000/recipeImage?$value.jpeg' : null;
   }
 
-  factory RecipeInstance.fromMap(Map<String, dynamic> map) {
-    return RecipeInstance(
+  factory Recipe.fromMap(Map<String, dynamic> map) {
+    return Recipe(
       name: map['name'],
       laluanGambar: map['laluanGambar'],
       bahan: convertToListStringMap(map['bahan']),

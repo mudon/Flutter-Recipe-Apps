@@ -18,7 +18,7 @@ class FetchUserHelper {
     return null;
   }
 
-  static Future<List<PostModel>> fetchUserSavedPosts(String userId) async {
+  static Future<List<PostModel>> savedPosts(String userId) async {
     UserModel? user = await getUser(userId);
     if (user != null &&
         user.savedPosts != null &&

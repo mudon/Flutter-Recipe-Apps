@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/models/list_of_recipe.dart';
+import 'package:recipe_project/data_layer/models/recipe.dart';
 
 class RecipeDetail extends StatefulWidget {
-  final RecipeInstance instance;
+  final Recipe instance;
   const RecipeDetail({super.key, required this.instance});
 
   @override
