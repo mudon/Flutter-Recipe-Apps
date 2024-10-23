@@ -1,3 +1,4 @@
+import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/repo/recipe_list_repo.dart';
 import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +17,8 @@ class CrudPost {
   }
 
   static Future<void> addPost(dynamic recipeData) async {
-    print("hiiii $recipeData");
+    List<PostModel> postInstance =
+        recipeData.map((post) => PostModel.fromMap(post)).toList();
   }
 
   static Future<void> removePost() async {}
