@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_bloc.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_user_saved_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_wheeler_ui.dart';
@@ -19,7 +18,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RecipeBloc()..add(LoadRecipes(false)),
+      create: (_) => PostBloc()..add(GetPosts(false)),
       child: MainPageView(),
     );
   }

@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/models/recipe.dart';
+import 'package:recipe_project/data_layer/models/post.dart';
 
 class RecipeDetail extends StatefulWidget {
-  final Recipe instance;
+  final PostModel instance;
   const RecipeDetail({super.key, required this.instance});
 
   @override
@@ -32,10 +32,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
   @override
   void initState() {
     super.initState();
-    name = widget.instance.name;
+    name = widget.instance.contentTitle;
     bahan = widget.instance.bahan;
     penyediaan = widget.instance.penyediaan;
-    laluanGambar = widget.instance.laluanGambar;
+    laluanGambar = widget.instance.contentImg;
   }
 
   Widget buildIngredientTiles(Map<String, List<String>> input) {

@@ -6,10 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_state.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_bloc.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
-import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 import 'package:recipe_project/presentation_layer/widgets/icon_button_recipe.dart';
 
@@ -128,8 +126,8 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                         ),
                         onChanged: (value) {
                           context
-                              .read<RecipeBloc>()
-                              .add(SearchRecipe(value, false));
+                              .read<PostBloc>()
+                              .add(SearchPost(value, false));
                         },
                       ),
                     ),
@@ -147,7 +145,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
         ),
         BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
-            if (state is RecipeLoading) {
+            if (state is PostLoading) {
               return SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator()),
               );
@@ -185,10 +183,9 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         image: DecorationImage(
-                                          image: NetworkImage(state
-                                                  .allRecipes[index]
-                                                  .laluanGambar ??
-                                              "null"),
+                                          image: NetworkImage(
+                                              state.posts[index].contentImg ??
+                                                  "null"),
                                           fit: BoxFit.cover,
                                           colorFilter: ColorFilter.mode(
                                             Colors.black.withOpacity(0.25),
@@ -201,7 +198,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                         child: Padding(
                                           padding: EdgeInsets.only(left: 16),
                                           child: Text(
-                                            state.allRecipes[index].name,
+                                            state.posts[index].contentTitle,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 60,
@@ -234,9 +231,9 @@ class _MainpageWidgetState extends State<MainpageWidget> {
             }
           },
         ),
-        BlocBuilder<RecipeBloc, RecipeState>(
+        BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
-            if (state is RecipeLoaded) {
+            if (state is PostsLoaded) {
               return SliverPadding(
                 padding: const EdgeInsets.all(16.0),
                 sliver: SliverGrid(
@@ -269,8 +266,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => RecipeDetail(
-                                        instance:
-                                            state.filteredRecipes[index])));
+                                        instance: state.filteredPosts[index])));
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +276,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10)),
                                 child: Image.network(
-                                  state.filteredRecipes[index].laluanGambar ??
+                                  state.filteredPosts[index].contentImg ??
                                       "null",
                                   height: 150,
                                   fit: BoxFit.cover,
@@ -288,7 +284,8 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 7.0),
-                                child: Text(state.filteredRecipes[index].name),
+                                child: Text(
+                                    state.filteredPosts[index].contentTitle),
                               ),
                               Spacer(),
                               Row(
@@ -323,7 +320,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                         ),
                       );
                     },
-                    childCount: state.filteredRecipes.length,
+                    childCount: state.filteredPosts.length,
                   ),
                 ),
               );

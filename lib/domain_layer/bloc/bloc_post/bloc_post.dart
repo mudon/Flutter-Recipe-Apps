@@ -14,7 +14,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<GetPosts>((event, emit) async {
       posts = await FetchPostHelper.getPosts();
 
-      emit(PostsLoaded(posts));
+      emit(PostsLoaded(posts, false, posts, event.isIndex));
+    });
+
+    on<SearchPost>((event, emit) {
+      final filteredPost = event.query.isEmpty
+          ? posts
+          : posts.where((post) {
+              return post.contentTitle
+                  .toLowerCase()
+                  .contains(event.query.toLowerCase());
+            }).toList();
+
+      emit(PostsLoaded(
+          posts, event.query.isNotEmpty, filteredPost, event.isIndex));
     });
 
     on<GetUserSavedPosts>((event, emit) async {
