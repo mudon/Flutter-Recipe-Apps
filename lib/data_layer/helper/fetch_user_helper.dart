@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:recipe_project/data_layer/helper/fetch_post_helper.dart';
+import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
 import 'package:recipe_project/data_layer/repo/user/fetch_user.dart';

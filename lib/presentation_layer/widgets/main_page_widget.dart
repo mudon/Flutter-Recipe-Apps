@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_state.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_bloc.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_event.dart';
 import 'package:recipe_project/domain_layer/bloc/recipe_fetch_state.dart';
@@ -143,13 +145,13 @@ class _MainpageWidgetState extends State<MainpageWidget> {
             ),
           ),
         ),
-        BlocBuilder<RecipeBloc, RecipeState>(
+        BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
             if (state is RecipeLoading) {
               return SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator()),
               );
-            } else if (state is RecipeLoaded) {
+            } else if (state is PostsLoaded) {
               if (!state.isSearching && _pageController == null) {
                 _pageController = PageController();
               } else if (state.isSearching && _pageController != null) {

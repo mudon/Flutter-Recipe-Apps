@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
+import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 
 import '../../data_layer/services/auth_service.dart';
 
@@ -55,7 +56,7 @@ class _userSavedRecipeState extends State<userSavedRecipe> {
               return Padding(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: GestureDetector(
-                  onTap: () => {CrudPostHelper.addPostFromBackend()},
+                  onTap: () => {FetchPostHelper.getPosts()},
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(

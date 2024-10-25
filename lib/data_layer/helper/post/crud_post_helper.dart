@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recipe_project/data_layer/repo/img/crud_image.dart';
 import 'package:recipe_project/data_layer/repo/posts/crud_post.dart';
+import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,8 +11,23 @@ class CrudPostHelper {
   }
 
   static Future<void> addPost(dynamic recipeData) async {
+    /*
+      recipeData >> Object
+      {
+        name: String, aka* title
+        bahan: Map<String, dynamic>,
+        penyediaan: Map<String, dynamic>,
+        likes: Map<dynamic, dynamic>,
+        comments: List<dynamic>,
+        contentDescription: String,
+        imgName: String{path},
+      }
+    */
     const uuid = Uuid();
     String postUid = uuid.v4();
+    bool imgExist;
+    String recipeName;
+    String? recipeUrl;
 
     Map<String, List<String>> reTypeBahan =
         (recipeData["bahan"] as Map<String, dynamic>).map(
@@ -36,14 +53,23 @@ class CrudPostHelper {
             recipeData["comments"] as List<dynamic>)
         : [];
 
+    recipeName = recipeData['name'].toLowerCase().replaceAll(' ', '-');
+    imgExist =
+        await doesImageExist('recipeImgs/developerPostImgs/$recipeName.jpg');
+
+    if (imgExist)
+      recipeUrl =
+          "https://firebasestorage.googleapis.com/v0/b/bahtera-resipi-d733f.appspot.com/o/recipeImgs%2FdeveloperPostImgs%2F${recipeName}.jpg?alt=media&token=5fe13439-7a55-4215-af79-b222c619d1f0";
+    else
+      recipeUrl = await CrudImage.addPostImg(recipeData["imgName"], postUid);
+
     Map<String, dynamic> postData = {
       "id": postUid,
       "authorId": AuthService.user?.uid,
       "bahan": reTypeBahan,
       "penyediaan": reTypePenyediaan,
       "contentTitle": recipeData["name"],
-      "contentImg":
-          "https://firebasestorage.googleapis.com/v0/b/bahtera-resipi-d733f.appspot.com/o/recipeImg%2F${recipeData["name"].toLowerCase().replaceAll(' ', '-')}.jpg?alt=media&token=963031fd-28c1-417b-aeb8-33c9017dcb03",
+      "contentImg": recipeUrl,
       "contentDescription": "dummyContent",
       "timePosted": Timestamp.now(),
       "likes": likesData,
@@ -55,4 +81,13 @@ class CrudPostHelper {
 
   static Future<void> editPost() async {}
   static Future<void> removePost() async {}
+
+  static Future<bool> doesImageExist(String imagePath) async {
+    try {
+      await DirectFirebase.storageRef.child(imagePath).getDownloadURL();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

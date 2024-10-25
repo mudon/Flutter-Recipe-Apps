@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:recipe_project/data_layer/helper/fetch_post_helper.dart';
+import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 import 'package:recipe_project/data_layer/helper/fetch_user_helper.dart';
 import 'package:recipe_project/data_layer/helper/recipe_list_to_map.dart';
 import 'package:recipe_project/data_layer/models/recipe.dart';

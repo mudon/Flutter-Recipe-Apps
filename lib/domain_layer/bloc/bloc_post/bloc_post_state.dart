@@ -8,7 +8,9 @@ class PostLoading extends PostState {}
 
 class PostsLoaded extends PostState {
   final List<PostModel> posts;
-  PostsLoaded(this.posts);
+  final bool isSearching;
+
+  PostsLoaded(this.posts, this.isSearching);
 }
 
 class savedPostsLoaded extends PostState {
