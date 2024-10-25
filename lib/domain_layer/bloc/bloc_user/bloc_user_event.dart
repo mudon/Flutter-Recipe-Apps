@@ -1,6 +1,12 @@
+import 'package:recipe_project/data_layer/models/post.dart';
+
 abstract class UserEvent {}
 
 class GetUser extends UserEvent {
-  late String uid;
-  GetUser(uid);
+  GetUser();
+}
+
+class AddSavedPosts extends UserEvent {
+  PostModel postToSave;
+  AddSavedPosts(this.postToSave);
 }

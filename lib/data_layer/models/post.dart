@@ -26,15 +26,31 @@ class PostModel {
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
-        id: map["id"],
-        authorId: map["authorId"],
-        bahan: map["bahan"],
-        penyediaan: map["penyediaan"],
-        contentTitle: map["contentTitle"],
-        contentImg: map["contentImg"],
-        contentDescription: map["contentDescription"],
-        timePosted: map["timePosted"],
-        likes: map["likes"],
-        comments: map["comments"]);
+      id: map["id"],
+      authorId: map["authorId"],
+      bahan: (map["bahan"] as Map<String, dynamic>).map(
+        (key, value) =>
+            MapEntry(key, List<String>.from(value as List<dynamic>)),
+      ),
+      penyediaan: (map["penyediaan"] as Map<String, dynamic>).map(
+        (key, value) =>
+            MapEntry(key, List<String>.from(value as List<dynamic>)),
+      ),
+      contentTitle: map["contentTitle"],
+      contentImg: map["contentImg"],
+      contentDescription: map["contentDescription"],
+      timePosted: map["timePosted"],
+      likes: (map["likes"] != null)
+          ? (map["likes"] as Map<dynamic, dynamic>).map(
+              (key, value) => MapEntry(
+                key as String,
+                Map<String, dynamic>.from(value as Map),
+              ),
+            )
+          : {},
+      comments: (map["comments"] != null)
+          ? List<Map<String, dynamic>>.from(map["comments"] as List<dynamic>)
+          : [],
+    );
   }
 }

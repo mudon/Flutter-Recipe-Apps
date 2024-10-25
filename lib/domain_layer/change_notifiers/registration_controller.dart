@@ -81,11 +81,11 @@ class RegistrationController extends ChangeNotifier {
           final userEmail = AuthService.user?.email;
           DirectFirebase.firestoreDatabase.collection("user").doc(userId).set({
             "userId": userId,
-            "avatarImg": null,
-            "createdPost": [],
+            "avatarImg": "",
+            "createdPosts": [],
             "email": userEmail,
             "name": username,
-            "savePosts": [],
+            "savedPosts": [],
           });
         }
       } else {

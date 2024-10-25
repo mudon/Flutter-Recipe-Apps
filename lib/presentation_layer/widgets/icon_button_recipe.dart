@@ -4,12 +4,14 @@ class IconButtonRecipe extends StatefulWidget {
   final bool isSelected;
   final IconData iconBefore;
   final IconData iconAfter;
+  final VoidCallback? onPressed;
 
   const IconButtonRecipe({
     super.key,
     required this.isSelected,
     required this.iconBefore,
     required this.iconAfter,
+    this.onPressed,
   });
 
   @override
@@ -32,11 +34,7 @@ class _IconButtonRecipeState extends State<IconButtonRecipe> {
       isSelected: isSelected,
       icon: Icon(widget.iconBefore),
       selectedIcon: Icon(widget.iconAfter),
-      onPressed: () {
-        setState(() {
-          isSelected = !isSelected;
-        });
-      },
+      onPressed: widget.onPressed,
     );
   }
 }

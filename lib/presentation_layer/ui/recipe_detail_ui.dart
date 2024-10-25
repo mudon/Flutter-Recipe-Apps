@@ -1,13 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
-import 'package:recipe_project/data_layer/services/auth_service.dart';
 
 class RecipeDetail extends StatefulWidget {
   final PostModel instance;

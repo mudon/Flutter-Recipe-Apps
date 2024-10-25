@@ -12,9 +12,3 @@ class SearchPost extends PostEvent {
 
   SearchPost(this.query, this.isIndex);
 }
-
-class GetUserSavedPosts extends PostEvent {
-  String uid;
-
-  GetUserSavedPosts(this.uid);
-}

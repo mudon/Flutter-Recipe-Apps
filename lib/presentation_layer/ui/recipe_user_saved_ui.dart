@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
 import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
+import 'package:recipe_project/data_layer/helper/user/fetch_user_helper.dart';
 
 import '../../data_layer/services/auth_service.dart';
 
@@ -18,23 +19,8 @@ class _userSavedRecipeState extends State<userSavedRecipe> {
   List<Map<String, String>> recipeDetails = [
     {
       "name": "Nasi Ayam",
-      "laluanGambar": 'http://10.0.2.2:3000/recipeImage?nasi-ayam.jpeg'
-    },
-    {
-      "name": "Nasi Ayam",
-      "laluanGambar": 'http://10.0.2.2:3000/recipeImage?nasi-ayam.jpeg'
-    },
-    {
-      "name": "Nasi Ayam",
-      "laluanGambar": 'http://10.0.2.2:3000/recipeImage?nasi-ayam.jpeg'
-    },
-    {
-      "name": "Nasi Ayam",
-      "laluanGambar": 'http://10.0.2.2:3000/recipeImage?nasi-ayam.jpeg'
-    },
-    {
-      "name": "Nasi Ayam",
-      "laluanGambar": 'http://10.0.2.2:3000/recipeImage?nasi-ayam.jpeg'
+      "laluanGambar":
+          'https://firebasestorage.googleapis.com/v0/b/bahtera-resipi-d733f.appspot.com/o/recipeImgs%2FdeveloperPostImgs%2Fayam-asd.jpg?alt=media&token=a24a177e-42c3-4a40-8ddb-3889d61d46c1'
     }
   ];
   final User? user = AuthService.user;
@@ -56,7 +42,7 @@ class _userSavedRecipeState extends State<userSavedRecipe> {
               return Padding(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: GestureDetector(
-                  onTap: () => {FetchPostHelper.getPosts()},
+                  onTap: () => {FetchUserHelper.getUser()},
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(

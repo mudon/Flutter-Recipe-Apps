@@ -10,36 +10,6 @@ class FetchPostHelper {
 
     List<PostModel> posts = postSnapshot.docs.map((doc) {
       Map<String, dynamic> postData = doc.data();
-      Map<String, List<String>> reTypeBahan =
-          (postData["bahan"] as Map<String, dynamic>).map(
-        (key, value) =>
-            MapEntry(key, List<String>.from(value as List<dynamic>)),
-      );
-
-      Map<String, List<String>> reTypePenyediaan =
-          (postData["penyediaan"] as Map<String, dynamic>).map(
-        (key, value) =>
-            MapEntry(key, List<String>.from(value as List<dynamic>)),
-      );
-
-      Map<String, Map<String, dynamic>>? likesData = (postData["likes"] != null)
-          ? (postData["likes"] as Map<dynamic, dynamic>).map(
-              (key, value) => MapEntry(
-                key as String,
-                Map<String, dynamic>.from(value as Map),
-              ),
-            )
-          : {};
-
-      List<Map<String, dynamic>>? commentsData = (postData["comments"] != null)
-          ? List<Map<String, dynamic>>.from(
-              postData["comments"] as List<dynamic>)
-          : [];
-
-      postData["bahan"] = reTypeBahan;
-      postData["penyediaan"] = reTypePenyediaan;
-      postData["likes"] = likesData;
-      postData["comments"] = commentsData;
 
       return PostModel.fromMap(postData);
     }).toList();

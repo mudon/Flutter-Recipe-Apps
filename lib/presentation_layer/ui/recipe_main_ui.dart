@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
-import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_saved_post/bloc_saved_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_user_saved_ui.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_wheeler_ui.dart';
 import 'package:recipe_project/presentation_layer/widgets/main_page_widget.dart';
@@ -17,8 +15,18 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => PostBloc()..add(GetPosts(false)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => PostBloc()..add(GetPosts(false)),
+        ),
+        BlocProvider(
+          create: (_) => UserBloc()..add(GetUser()),
+        ),
+        BlocProvider(
+          create: (_) => BlocSavedPost(),
+        ),
+      ],
       child: MainPageView(),
     );
   }

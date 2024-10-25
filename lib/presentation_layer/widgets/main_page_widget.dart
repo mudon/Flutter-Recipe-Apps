@@ -1,13 +1,20 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
+import 'package:recipe_project/data_layer/helper/user/fetch_user_helper.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_state.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_saved_post/bloc_saved_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_state.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 import 'package:recipe_project/presentation_layer/widgets/icon_button_recipe.dart';
 
@@ -83,21 +90,33 @@ class _MainpageWidgetState extends State<MainpageWidget> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text("Hiii 👋🏻"), Text("Muhammad Hazim")],
+        BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+          if (state is UserLoading) {
+            return SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          } else if (state is UserLoaded) {
+            return SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Text("Hiii 👋🏻"), Text(state.user.name)],
+                    ),
+                    CircleAvatar()
+                  ],
                 ),
-                CircleAvatar()
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return SliverFillRemaining(
+              child: Center(child: Text('User Unavailable, please register!')),
+            );
+          }
+        }),
         SliverAppBar(
           expandedHeight: 70.0,
           floating: true,
@@ -313,7 +332,12 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                     IconButtonRecipe(
                                         isSelected: bookmarkCount[index],
                                         iconBefore: Icons.bookmark_border,
-                                        iconAfter: Icons.bookmark)
+                                        iconAfter: Icons.bookmark,
+                                        onPressed: () {
+                                          context.read<BlocSavedPost>().add(
+                                              AddSavedPosts(
+                                                  state.filteredPosts[index]));
+                                        })
                                   ]),
                             ],
                           ),

@@ -14,9 +14,3 @@ class PostsLoaded extends PostState {
 
   PostsLoaded(this.posts, this.isSearching, this.filteredPosts, this.isIndex);
 }
-
-class savedPostsLoaded extends PostState {
-  final List<PostModel?> savedPosts;
-
-  savedPostsLoaded(this.savedPosts);
-}

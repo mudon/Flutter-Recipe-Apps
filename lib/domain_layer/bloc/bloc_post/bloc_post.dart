@@ -29,10 +29,5 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(PostsLoaded(
           posts, event.query.isNotEmpty, filteredPost, event.isIndex));
     });
-
-    on<GetUserSavedPosts>((event, emit) async {
-      savedPosts = await FetchUserHelper.savedPosts(uid);
-      emit(savedPostsLoaded(savedPosts!));
-    });
   }
 }

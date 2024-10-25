@@ -8,5 +8,11 @@ class UserLoading extends UserState {}
 
 class UserLoaded extends UserState {
   final UserModel user;
+
   UserLoaded(this.user);
+}
+
+class PostSaved extends UserState {
+  bool isSaved;
+  PostSaved(this.isSaved);
 }
