@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:recipe_project/core/style/colors.dart';
+import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
+import 'package:recipe_project/data_layer/models/user.dart';
+import 'package:recipe_project/data_layer/services/auth_service.dart';
 
 class RecipeDetail extends StatefulWidget {
   final PostModel instance;
@@ -19,23 +22,18 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late Map<String, List<String>> penyediaan;
   late String? laluanGambar;
   late String? name;
-  List<Map<String, String>> dummyComments = [
-    {"name": "Muhammad Hazim", "timestamp": "12 min", "comment": "sedapnyaa"},
-    {"name": "John Doe", "timestamp": "5 min", "comment": "Great post!"},
-    {
-      "name": "Jane Smith",
-      "timestamp": "1 hr",
-      "comment": "I agree with this."
-    },
-  ]; //remember to change
+  late PostModel postInstance;
+  late UserModel userInstance;
   TextEditingController commentController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    name = widget.instance.contentTitle;
-    bahan = widget.instance.bahan;
-    penyediaan = widget.instance.penyediaan;
-    laluanGambar = widget.instance.contentImg;
+    postInstance = widget.instance;
+    name = postInstance.contentTitle;
+    bahan = postInstance.bahan;
+    penyediaan = postInstance.penyediaan;
+    laluanGambar = postInstance.contentImg;
   }
 
   Widget buildIngredientTiles(Map<String, List<String>> input) {
@@ -216,12 +214,19 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   icon: Icon(Icons.arrow_upward),
                   color: recipeColor.primary,
                   onPressed: () {
-                    dummyComments.add({
-                      "name": "maybe",
-                      "timestamp": "example",
-                      "comment": "comment"
-                    });
-                    print(dummyComments);
+                    // dummyComments.add({
+                    //   "name": "maybe",
+                    //   "timestamp": "example",
+                    //   "comment": "comment"
+                    // });
+
+                    // CrudPostHelper.addComment(postInstance.id, {
+                    //   time: Timestamp.now(),
+                    //   userId: AuthService.user?.id,
+                    //   comment: commentController,
+                    //   name: user.name
+                    // });
+                    print("this.instance ${postInstance.comments}");
                   },
                 ),
               ]),
@@ -229,9 +234,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
             SliverToBoxAdapter(
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: dummyComments.length,
+                  itemCount: postInstance.comments?.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final comment = dummyComments[index];
+                    final comment = postInstance.comments?[index];
+
                     return Padding(
                       padding: EdgeInsets.all(10),
                       child: Row(
@@ -241,40 +247,38 @@ class _RecipeDetailState extends State<RecipeDetail> {
                           SizedBox(
                             width: 10,
                           ),
-                          Expanded(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          comment["name"]!,
-                                          style: TextStyle(fontSize: 25),
+                          Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        comment?["userName"],
+                                        style: TextStyle(fontSize: 25),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        comment?["time"],
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 18,
                                         ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          comment["timestamps"]!,
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      comment["comment"]!,
-                                    )
-                                  ],
-                                )),
-                          )
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    comment?["comment"],
+                                  )
+                                ],
+                              ))
                         ],
                       ),
                     );

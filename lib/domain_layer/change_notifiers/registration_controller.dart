@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 
 class RegistrationController extends ChangeNotifier {
@@ -48,7 +49,8 @@ class RegistrationController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> authenticateWithEmailAndPassword({required BuildContext context}) async {
+  Future<void> authenticateWithEmailAndPassword(
+      {required BuildContext context}) async {
     isLoading = true;
     try {
       if (_isRegisterMode) {
@@ -72,6 +74,19 @@ class RegistrationController extends ChangeNotifier {
               content: Text('Please verify your email before logging in.'),
             ),
           );
+        }
+
+        if (AuthService.user != null && AuthService.isEmailVerified) {
+          final userId = AuthService.user?.uid;
+          final userEmail = AuthService.user?.email;
+          DirectFirebase.firestoreDatabase.collection("user").doc(userId).set({
+            "userId": userId,
+            "avatarImg": null,
+            "createdPost": [],
+            "email": userEmail,
+            "name": username,
+            "savePosts": [],
+          });
         }
       } else {
         // Login user

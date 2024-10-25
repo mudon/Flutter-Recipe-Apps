@@ -90,4 +90,28 @@ class CrudPostHelper {
       return false;
     }
   }
+
+  static Future<void> addComment(
+      String postId, Map<String, dynamic> commentData) async {
+    /*
+      postId: String.
+
+      commentData:
+      {
+        time: TimeStamp,
+        userId: String,
+        commentId: String,
+        comment: String,
+        userName: String
+      }
+     */
+    await CrudPost.addComment(postId, commentData);
+  }
+
+  static Future<void> removeComments() async {}
+  static Future<void> editComments() async {}
+
+  static Future<void> getLikes() async {}
+  static Future<void> addLikes() async {}
+  static Future<void> removeLikes() async {}
 }
