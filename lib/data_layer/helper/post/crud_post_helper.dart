@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_project/data_layer/repo/img/crud_image.dart';
 import 'package:recipe_project/data_layer/repo/posts/crud_post.dart';
+import 'package:recipe_project/data_layer/repo/posts/fetch_post.dart';
 import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
 import 'package:uuid/uuid.dart';
 
 class CrudPostHelper {
@@ -74,6 +76,7 @@ class CrudPostHelper {
       "timePosted": Timestamp.now(),
       "likes": likesData,
       "comments": commentsData,
+      "isBookmarked": false,
     };
 
     CrudPost.addPost(postData);
@@ -114,4 +117,12 @@ class CrudPostHelper {
   static Future<void> getLikes() async {}
   static Future<void> addLikes() async {}
   static Future<void> removeLikes() async {}
+
+  static Future<void> AddSavedPosts(String? userId, String postId) async {
+    await CrudPost.addSavedPost(userId, postId);
+  }
+
+  static Future<void> removeSavedPost(String? userId, String postId) async {
+    await CrudPost.removeSavedPost(userId, postId);
+  }
 }

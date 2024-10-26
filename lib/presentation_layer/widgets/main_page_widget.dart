@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/helper/user/fetch_user_helper.dart';
+import 'package:recipe_project/data_layer/models/post.dart';
+import 'package:recipe_project/data_layer/models/user.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_state.dart';
-import 'package:recipe_project/domain_layer/bloc/bloc_saved_post/bloc_saved_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_state.dart';
@@ -329,15 +329,32 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                       ],
                                     ),
                                     Spacer(),
-                                    IconButtonRecipe(
-                                        isSelected: bookmarkCount[index],
-                                        iconBefore: Icons.bookmark_border,
-                                        iconAfter: Icons.bookmark,
-                                        onPressed: () {
-                                          context.read<BlocSavedPost>().add(
-                                              AddSavedPosts(
-                                                  state.filteredPosts[index]));
-                                        })
+                                    BlocBuilder<UserBloc, UserState>(
+                                        builder: (context, userState) {
+                                      if (userState is UserLoaded) {
+                                        UserModel user = userState.user;
+
+                                        return IconButtonRecipe(
+                                          isSelected: bookmarkCount[index],
+                                          iconBefore: Icons.bookmark_border,
+                                          iconAfter: Icons.bookmark,
+                                          onPressed: () {
+                                            context.read<SavedPostBloc>().add(
+                                                  AddSavedPosts(
+                                                    user,
+                                                    state.filteredPosts[index],
+                                                  ),
+                                                );
+
+                                            setState(() {
+                                              bookmarkCount[index] =
+                                                  !bookmarkCount[index];
+                                            });
+                                          },
+                                        );
+                                      }
+                                      return Container();
+                                    }),
                                   ]),
                             ],
                           ),

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
-import 'package:recipe_project/domain_layer/bloc/bloc_saved_post/bloc_saved_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
 import 'package:recipe_project/presentation_layer/ui/recipe_user_saved_ui.dart';
@@ -21,11 +20,11 @@ class MainPage extends StatelessWidget {
           create: (_) => PostBloc()..add(GetPosts(false)),
         ),
         BlocProvider(
-          create: (_) => UserBloc()..add(GetUser()),
+          create: (_) => UserBloc()..add(LoadUser()),
         ),
         BlocProvider(
-          create: (_) => BlocSavedPost(),
-        ),
+          create: (_) => SavedPostBloc(),
+        )
       ],
       child: MainPageView(),
     );

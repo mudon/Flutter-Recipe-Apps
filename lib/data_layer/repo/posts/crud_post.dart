@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/repo/recipe_list_repo.dart';
@@ -40,4 +41,26 @@ class CrudPost {
   static Future<void> getLikes() async {}
   static Future<void> addLikes() async {}
   static Future<void> removeLikes() async {}
+
+  static Future<void> addSavedPost(String? userId, String postId) async {
+    DocumentReference userRef =
+        DirectFirebase.firestoreDatabase.collection('user').doc(userId);
+    DocumentReference postRef =
+        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    await userRef.update({
+      'savedPosts': FieldValue.arrayUnion([postRef])
+    });
+  }
+
+  static Future<void> removeSavedPost(String? userId, String postId) async {
+    DocumentReference userRef =
+        DirectFirebase.firestoreDatabase.collection('user').doc(userId);
+    DocumentReference postRef =
+        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    await userRef.update({
+      'savedPosts': FieldValue.arrayRemove([postRef])
+    });
+  }
 }

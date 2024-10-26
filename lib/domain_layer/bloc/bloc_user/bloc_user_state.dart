@@ -12,7 +12,13 @@ class UserLoaded extends UserState {
   UserLoaded(this.user);
 }
 
-class PostSaved extends UserState {
+abstract class SavedPostState {}
+
+class SavedPostInitial extends SavedPostState {}
+
+class SavedPostLoading extends SavedPostState {}
+
+class PostSaved extends SavedPostState {
   bool isSaved;
   PostSaved(this.isSaved);
 }
