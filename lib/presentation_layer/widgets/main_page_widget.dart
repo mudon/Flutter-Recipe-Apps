@@ -264,6 +264,8 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
+                      final post = state.filteredPosts[index];
+
                       return Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -313,10 +315,17 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                   children: [
                                     Row(
                                       children: [
-                                        IconButtonRecipe(
-                                            isSelected: isLiked[index],
-                                            iconBefore: Icons.favorite_border,
-                                            iconAfter: Icons.favorite),
+                                        BlocBuilder<UserBloc, UserState>(
+                                            builder: (context, userState) {
+                                          if (userState is UserLoaded) {
+                                            return IconButtonRecipe(
+                                                isSelected: isLiked[index],
+                                                iconBefore:
+                                                    Icons.favorite_border,
+                                                iconAfter: Icons.favorite);
+                                          }
+                                          return Container();
+                                        }),
                                         Container(
                                           // margin: EdgeInsets.only(left: 3.0),
                                           child: Text(
@@ -334,22 +343,36 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                       if (userState is UserLoaded) {
                                         UserModel user = userState.user;
 
-                                        return IconButtonRecipe(
-                                          isSelected: bookmarkCount[index],
-                                          iconBefore: Icons.bookmark_border,
-                                          iconAfter: Icons.bookmark,
-                                          onPressed: () {
-                                            context.read<SavedPostBloc>().add(
-                                                  AddSavedPosts(
-                                                    user,
-                                                    state.filteredPosts[index],
-                                                  ),
-                                                );
+                                        return BlocBuilder<SavedPostBloc,
+                                            SavedPostState>(
+                                          builder: (context, savedPostState) {
+                                            return IconButtonRecipe(
+                                              iconBefore: post.isBookmarked
+                                                  ? Icons.bookmark
+                                                  : Icons.bookmark_border,
+                                              onPressed: () {
+                                                if (post.isBookmarked) {
+                                                  context
+                                                      .read<SavedPostBloc>()
+                                                      .add(
+                                                        RemoveSavedPost(
+                                                            user, post.id),
+                                                      );
+                                                  user.savedPosts?.remove(post);
+                                                  post.isBookmarked = false;
+                                                } else {
+                                                  context
+                                                      .read<SavedPostBloc>()
+                                                      .add(
+                                                        AddSavedPosts(
+                                                            user, post.id),
+                                                      );
+                                                  user.savedPosts?.add(post);
 
-                                            setState(() {
-                                              bookmarkCount[index] =
-                                                  !bookmarkCount[index];
-                                            });
+                                                  post.isBookmarked = true;
+                                                }
+                                              },
+                                            );
                                           },
                                         );
                                       }

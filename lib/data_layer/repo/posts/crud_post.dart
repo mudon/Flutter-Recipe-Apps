@@ -38,15 +38,48 @@ class CrudPost {
   static Future<void> removeComment() async {}
   static Future<void> editComment() async {}
 
-  static Future<void> getLikes() async {}
-  static Future<void> addLikes() async {}
-  static Future<void> removeLikes() async {}
+  static Future<void> getLikes(String postId) async {
+    DocumentSnapshot<Map<String, dynamic>> postRef = await DirectFirebase
+        .firestoreDatabase
+        .collection('posts')
+        .doc(postId)
+        .get();
+
+    return postRef["likes"];
+  }
+
+  static Future<void> addLikes(
+      String postId, String userId, Timestamp time) async {
+    DocumentReference postRef =
+        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    postRef.set({
+      "likes": {
+        userId: {
+          "userId": userId,
+          "icon": 1,
+          time: time,
+        }
+      }
+    }, SetOptions(merge: true));
+  }
+
+  static Future<void> removeLikes(String postId, String userId) async {
+    DocumentReference postRef =
+        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    postRef.update({
+      "likes": {userId: FieldValue.delete()}
+    });
+  }
 
   static Future<void> addSavedPost(String? userId, String postId) async {
     DocumentReference userRef =
         DirectFirebase.firestoreDatabase.collection('user').doc(userId);
     DocumentReference postRef =
         DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    await postRef.update({'isBookmarked': true});
 
     await userRef.update({
       'savedPosts': FieldValue.arrayUnion([postRef])
@@ -58,6 +91,8 @@ class CrudPost {
         DirectFirebase.firestoreDatabase.collection('user').doc(userId);
     DocumentReference postRef =
         DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+
+    await postRef.update({'isBookmarked': false});
 
     await userRef.update({
       'savedPosts': FieldValue.arrayRemove([postRef])

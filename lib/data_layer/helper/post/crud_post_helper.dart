@@ -114,9 +114,17 @@ class CrudPostHelper {
   static Future<void> removeComments() async {}
   static Future<void> editComments() async {}
 
-  static Future<void> getLikes() async {}
-  static Future<void> addLikes() async {}
-  static Future<void> removeLikes() async {}
+  static Future<void> getLikes(String postId) async {
+    await CrudPost.getLikes(postId);
+  }
+
+  static Future<void> toggleLikes(
+      bool isLiked, String postId, String userId, Timestamp time) async {
+    if (isLiked)
+      CrudPost.removeLikes(postId, userId);
+    else
+      CrudPost.addLikes(postId, userId, time);
+  }
 
   static Future<void> AddSavedPosts(String? userId, String postId) async {
     await CrudPost.addSavedPost(userId, postId);

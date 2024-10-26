@@ -15,7 +15,20 @@ class GetUser extends UserEvent {
 
 class AddSavedPosts extends SavedPostEvent {
   UserModel user;
-  PostModel postToSave;
+  String postId;
 
-  AddSavedPosts(this.user, this.postToSave);
+  AddSavedPosts(this.user, this.postId);
+}
+
+class RemoveSavedPost extends SavedPostEvent {
+  UserModel user;
+  String postId;
+
+  RemoveSavedPost(this.user, this.postId);
+}
+
+class ToggleBookmarkEvent extends SavedPostEvent {
+  final String postId;
+
+  ToggleBookmarkEvent(this.postId);
 }

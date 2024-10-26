@@ -24,6 +24,9 @@ class MainPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => SavedPostBloc(),
+        ),
+        BlocProvider(
+          create: (_) => LikePostBloc(),
         )
       ],
       child: MainPageView(),

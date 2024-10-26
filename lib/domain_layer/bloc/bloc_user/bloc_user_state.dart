@@ -18,7 +18,10 @@ class SavedPostInitial extends SavedPostState {}
 
 class SavedPostLoading extends SavedPostState {}
 
-class PostSaved extends SavedPostState {
-  bool isSaved;
-  PostSaved(this.isSaved);
+class PostSaved extends SavedPostState {}
+
+class PostError extends SavedPostState {
+  final String message;
+
+  PostError(this.message);
 }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class IconButtonRecipe extends StatefulWidget {
-  final bool isSelected;
-  final IconData iconBefore;
-  final IconData iconAfter;
+  final bool? isSelected;
+  final IconData? iconBefore;
+  final IconData? iconAfter;
   final VoidCallback? onPressed;
 
   const IconButtonRecipe({
     super.key,
-    required this.isSelected,
-    required this.iconBefore,
-    required this.iconAfter,
+    this.isSelected,
+    this.iconBefore,
+    this.iconAfter,
     this.onPressed,
   });
 
@@ -19,19 +19,15 @@ class IconButtonRecipe extends StatefulWidget {
 }
 
 class _IconButtonRecipeState extends State<IconButtonRecipe> {
-  late bool isSelected;
-
   @override
   void initState() {
     super.initState();
-    isSelected = widget
-        .isSelected; // Initialize local state with the passed isBookmark value
   }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      isSelected: isSelected,
+      isSelected: widget.isSelected,
       icon: Icon(widget.iconBefore),
       selectedIcon: Icon(widget.iconAfter),
       onPressed: widget.onPressed,

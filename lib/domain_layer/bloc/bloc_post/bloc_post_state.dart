@@ -14,3 +14,13 @@ class PostsLoaded extends PostState {
 
   PostsLoaded(this.posts, this.isSearching, this.filteredPosts, this.isIndex);
 }
+
+abstract class LikePostState {}
+
+class LikePostInitial extends LikePostState {}
+
+class LikePostLoading extends LikePostState {}
+
+class LikePostsToggled extends LikePostState {
+  LikePostsToggled();
+}

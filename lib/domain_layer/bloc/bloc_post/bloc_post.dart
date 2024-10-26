@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_project/data_layer/helper/post/crud_post_helper.dart';
 import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 import 'package:recipe_project/data_layer/helper/user/fetch_user_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
@@ -28,6 +29,16 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
       emit(PostsLoaded(
           posts, event.query.isNotEmpty, filteredPost, event.isIndex));
+    });
+  }
+}
+
+class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
+  LikePostBloc() : super(LikePostInitial()) {
+    on<ToggleLike>((event, emit) async {
+      CrudPostHelper.toggleLikes(
+          event.isLiked, event.postId, event.userId, event.time);
+      emit(LikePostsToggled());
     });
   }
 }

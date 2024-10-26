@@ -12,6 +12,7 @@ class PostModel {
   Map<String, Map<String, dynamic>>? likes;
   Timestamp timePosted;
   List<Map<String, dynamic>>? comments;
+  bool isBookmarked;
   PostModel(
       {required this.id,
       required this.authorId,
@@ -22,7 +23,8 @@ class PostModel {
       required this.timePosted,
       this.contentDescription,
       this.likes,
-      this.comments});
+      this.comments,
+      required this.isBookmarked});
 
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
@@ -51,6 +53,7 @@ class PostModel {
       comments: (map["comments"] != null)
           ? List<Map<String, dynamic>>.from(map["comments"] as List<dynamic>)
           : [],
+      isBookmarked: map["isBookmarked"],
     );
   }
 }
