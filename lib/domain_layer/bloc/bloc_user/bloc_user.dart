@@ -23,14 +23,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
 class SavedPostBloc extends Bloc<SavedPostEvent, SavedPostState> {
   SavedPostBloc() : super(SavedPostInitial()) {
-    on<AddSavedPosts>((event, emit) async {
-      await CrudPostHelper.AddSavedPosts(event.user.id, event.postId);
+    on<ToggleBookmarkEvent>((event, emit) async {
+      await CrudPostHelper.toggleBookmarked(
+          event.isBookmarked, event.post.id, event.userId, event.time);
 
-      emit(PostSaved());
-    });
-
-    on<RemoveSavedPost>((event, emit) async {
-      await CrudPostHelper.removeSavedPost(event.user.id, event.postId);
+      if (event.isBookmarked) {
+        event.post.isBookmarked?.remove(event.userId);
+      } else {
+        event.post.isBookmarked?[event.userId] = {
+          "userId": event.userId,
+          "time": event.time,
+        };
+      }
 
       emit(PostSaved());
     });

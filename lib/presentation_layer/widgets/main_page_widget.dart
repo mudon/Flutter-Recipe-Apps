@@ -353,9 +353,8 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                                 builder:
                                                     (context, likePostState) {
                                               return Container(
-                                                // margin: EdgeInsets.only(left: 3.0),
                                                 child: Text(
-                                                  '${likeCount[index]}',
+                                                  '${post.likes?.length}',
                                                   style: TextStyle(
                                                     fontSize: 23,
                                                   ),
@@ -376,31 +375,23 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                         return BlocBuilder<SavedPostBloc,
                                             SavedPostState>(
                                           builder: (context, savedPostState) {
+                                            bool isBookmarked =
+                                                post.isBookmarked != null &&
+                                                    post.isBookmarked!
+                                                        .containsKey(
+                                                            userState.user.id);
                                             return IconButtonRecipe(
-                                              iconBefore: post.isBookmarked
+                                              iconBefore: isBookmarked
                                                   ? Icons.bookmark
                                                   : Icons.bookmark_border,
                                               onPressed: () {
-                                                if (post.isBookmarked) {
-                                                  context
-                                                      .read<SavedPostBloc>()
-                                                      .add(
-                                                        RemoveSavedPost(
-                                                            user, post.id),
-                                                      );
-                                                  user.savedPosts?.remove(post);
-                                                  post.isBookmarked = false;
-                                                } else {
-                                                  context
-                                                      .read<SavedPostBloc>()
-                                                      .add(
-                                                        AddSavedPosts(
-                                                            user, post.id),
-                                                      );
-                                                  user.savedPosts?.add(post);
-
-                                                  post.isBookmarked = true;
-                                                }
+                                                context
+                                                    .read<SavedPostBloc>()
+                                                    .add(ToggleBookmarkEvent(
+                                                        isBookmarked,
+                                                        post,
+                                                        userState.user.id,
+                                                        Timestamp.now()));
                                               },
                                             );
                                           },

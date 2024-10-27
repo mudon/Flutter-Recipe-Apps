@@ -126,11 +126,11 @@ class CrudPostHelper {
       await CrudPost.addLikes(postId, userId, time);
   }
 
-  static Future<void> AddSavedPosts(String? userId, String postId) async {
-    await CrudPost.addSavedPost(userId, postId);
-  }
-
-  static Future<void> removeSavedPost(String? userId, String postId) async {
-    await CrudPost.removeSavedPost(userId, postId);
+  static Future<void> toggleBookmarked(
+      bool isBookmarked, String postId, String userId, Timestamp time) async {
+    if (isBookmarked)
+      await CrudPost.removedBookmark(postId, userId);
+    else
+      await CrudPost.addBookmark(postId, userId, time);
   }
 }
