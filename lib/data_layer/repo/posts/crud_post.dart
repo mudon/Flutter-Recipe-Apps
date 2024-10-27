@@ -51,14 +51,14 @@ class CrudPost {
   static Future<void> addLikes(
       String postId, String userId, Timestamp time) async {
     DocumentReference postRef =
-        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+        await DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
 
-    postRef.set({
+    await postRef.set({
       "likes": {
         userId: {
           "userId": userId,
           "icon": 1,
-          time: time,
+          "time": time,
         }
       }
     }, SetOptions(merge: true));
@@ -66,11 +66,9 @@ class CrudPost {
 
   static Future<void> removeLikes(String postId, String userId) async {
     DocumentReference postRef =
-        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
+        await DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
 
-    postRef.update({
-      "likes": {userId: FieldValue.delete()}
-    });
+    await postRef.update({"likes.$userId": FieldValue.delete()});
   }
 
   static Future<void> addSavedPost(String? userId, String postId) async {

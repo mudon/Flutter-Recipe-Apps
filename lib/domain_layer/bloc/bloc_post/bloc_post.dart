@@ -36,8 +36,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
   LikePostBloc() : super(LikePostInitial()) {
     on<ToggleLike>((event, emit) async {
-      CrudPostHelper.toggleLikes(
-          event.isLiked, event.postId, event.userId, event.time);
+      await CrudPostHelper.toggleLikes(
+          event.isLiked, event.post.id, event.userId, event.time);
+
+      if (event.isLiked) {
+        event.post.likes?.remove(event.userId);
+      } else {
+        event.post.likes?[event.userId] = {
+          "userId": event.userId,
+          "icon": 1,
+          "time": event.time,
+        };
+      }
+
       emit(LikePostsToggled());
     });
   }

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -318,23 +319,52 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                         BlocBuilder<UserBloc, UserState>(
                                             builder: (context, userState) {
                                           if (userState is UserLoaded) {
-                                            return IconButtonRecipe(
-                                                isSelected: isLiked[index],
-                                                iconBefore:
-                                                    Icons.favorite_border,
-                                                iconAfter: Icons.favorite);
+                                            return BlocBuilder<LikePostBloc,
+                                                    LikePostState>(
+                                                builder:
+                                                    (context, likePostState) {
+                                              bool isLiked =
+                                                  post.likes != null &&
+                                                      post.likes!.containsKey(
+                                                          userState.user.id);
+                                              return IconButtonRecipe(
+                                                iconBefore: isLiked
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                onPressed: () {
+                                                  context
+                                                      .read<LikePostBloc>()
+                                                      .add(ToggleLike(
+                                                          isLiked,
+                                                          post,
+                                                          userState.user.id,
+                                                          Timestamp.now()));
+                                                },
+                                              );
+                                            });
                                           }
                                           return Container();
                                         }),
-                                        Container(
-                                          // margin: EdgeInsets.only(left: 3.0),
-                                          child: Text(
-                                            '${likeCount[index]}',
-                                            style: TextStyle(
-                                              fontSize: 23,
-                                            ),
-                                          ),
-                                        ),
+                                        BlocBuilder<UserBloc, UserState>(
+                                            builder: (context, userState) {
+                                          if (userState is UserLoaded) {
+                                            return BlocBuilder<LikePostBloc,
+                                                    LikePostState>(
+                                                builder:
+                                                    (context, likePostState) {
+                                              return Container(
+                                                // margin: EdgeInsets.only(left: 3.0),
+                                                child: Text(
+                                                  '${likeCount[index]}',
+                                                  style: TextStyle(
+                                                    fontSize: 23,
+                                                  ),
+                                                ),
+                                              );
+                                            });
+                                          }
+                                          return Container();
+                                        }),
                                       ],
                                     ),
                                     Spacer(),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recipe_project/data_layer/models/post.dart';
 
 abstract class PostEvent {}
 
@@ -19,8 +20,8 @@ abstract class LikePostEvent {}
 
 class ToggleLike extends LikePostEvent {
   bool isLiked;
-  String postId;
+  PostModel post;
   String userId;
   Timestamp time;
-  ToggleLike(this.isLiked, this.postId, this.userId, this.time);
+  ToggleLike(this.isLiked, this.post, this.userId, this.time);
 }

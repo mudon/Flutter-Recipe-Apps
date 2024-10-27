@@ -9,7 +9,7 @@ class PostModel {
   String contentTitle;
   String? contentDescription;
   String contentImg;
-  Map<String, Map<String, dynamic>>? likes;
+  Map<String, Map<String, dynamic>?>? likes;
   Timestamp timePosted;
   List<Map<String, dynamic>>? comments;
   bool isBookmarked;

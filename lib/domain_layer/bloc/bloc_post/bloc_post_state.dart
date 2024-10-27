@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 
 abstract class PostState {}
@@ -21,6 +22,4 @@ class LikePostInitial extends LikePostState {}
 
 class LikePostLoading extends LikePostState {}
 
-class LikePostsToggled extends LikePostState {
-  LikePostsToggled();
-}
+class LikePostsToggled extends LikePostState {}

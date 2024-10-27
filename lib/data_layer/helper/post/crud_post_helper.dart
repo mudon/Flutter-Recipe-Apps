@@ -121,9 +121,9 @@ class CrudPostHelper {
   static Future<void> toggleLikes(
       bool isLiked, String postId, String userId, Timestamp time) async {
     if (isLiked)
-      CrudPost.removeLikes(postId, userId);
+      await CrudPost.removeLikes(postId, userId);
     else
-      CrudPost.addLikes(postId, userId, time);
+      await CrudPost.addLikes(postId, userId, time);
   }
 
   static Future<void> AddSavedPosts(String? userId, String postId) async {
