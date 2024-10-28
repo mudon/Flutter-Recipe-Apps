@@ -7,7 +7,6 @@ class FetchPostHelper {
   static Future<List<PostModel>> getPosts() async {
     QuerySnapshot<Map<String, dynamic>> postSnapshot =
         await FetchPost.mapPostData();
-
     List<PostModel> posts = postSnapshot.docs.map((doc) {
       Map<String, dynamic> postData = doc.data();
 
@@ -29,6 +28,24 @@ class FetchPostHelper {
         Map<String, dynamic>? postData = postSnapshot.data();
         if (postData != null) {
           posts.add(PostModel.fromMap(postData));
+        }
+      }
+    }
+    return posts;
+  }
+
+  static Future<Map<String, PostModel>> getPostsByReferencesModified(
+      List<DocumentReference> postReferences) async {
+    Map<String, PostModel> posts = {};
+
+    for (DocumentReference ref in postReferences) {
+      DocumentSnapshot<Map<String, dynamic>> postSnapshot =
+          await ref.get() as DocumentSnapshot<Map<String, dynamic>>;
+
+      if (postSnapshot.exists) {
+        Map<String, dynamic>? postData = postSnapshot.data();
+        if (postData != null) {
+          posts[postData["id"]] = PostModel.fromMap(postData);
         }
       }
     }

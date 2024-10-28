@@ -6,31 +6,39 @@ import 'package:recipe_project/data_layer/repo/user/fetch_user.dart';
 
 class FetchUserHelper {
   static Future<UserModel?> getUser() async {
-    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-        await FetchUser.mapUserData();
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await FetchUser.mapUserData();
 
-    if (userSnapshot.exists) {
-      Map<String, dynamic>? userData = userSnapshot.data();
-      List<PostModel> posts;
-      if (userData != null) {
-        List<String> categoriesList =
-            List<String>.from(userData["createdPosts"] as List);
+      if (userSnapshot.exists) {
+        Map<String, dynamic>? userData = userSnapshot.data();
+        List<PostModel> posts = [];
 
-        userData["createdPosts"] = categoriesList;
+        if (userData != null) {
+          // Convert createdPosts to a list of Strings if it exists
+          if (userData["createdPosts"] != null) {
+            userData["createdPosts"] =
+                List<String>.from(userData["createdPosts"]);
+          }
 
-        List<DocumentReference<Object?>> reTypeSavedPosts =
-            (userData["savedPosts"] as List).cast<DocumentReference<Object?>>();
+          // Handle savedPosts fetching
+          if (userData["savedPosts"] != null &&
+              userData["savedPosts"].isNotEmpty) {
+            List<DocumentReference<Object?>> reTypeSavedPosts =
+                (userData["savedPosts"] as List)
+                    .cast<DocumentReference<Object?>>();
+            posts =
+                await FetchPostHelper.getPostsByReferences(reTypeSavedPosts);
+            userData["savedPosts"] = posts;
+          }
 
-        if (userData["savedPosts"].length != 0) {
-          posts = await FetchPostHelper.getPostsByReferences(reTypeSavedPosts);
-        } else
-          posts = [];
-
-        userData["savedPosts"] = posts;
-
-        return UserModel.fromMap(userData);
+          return UserModel.fromMap(userData);
+        }
       }
+    } catch (e) {
+      // Handle errors (logging, rethrowing, etc.)
+      print('Error fetching user data: $e');
     }
-    return null;
+    return null; // Return null if user does not exist or any error occurs
   }
 }

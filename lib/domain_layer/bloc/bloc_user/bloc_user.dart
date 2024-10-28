@@ -27,6 +27,11 @@ class SavedPostBloc extends Bloc<SavedPostEvent, SavedPostState> {
       await CrudPostHelper.toggleBookmarked(
           event.isBookmarked, event.post.id, event.user.id, event.time);
 
+      await CrudPostHelper.toggleBookmarkedModifed(
+          event.isBookmarked, event.post.id, event.user.id, event.time);
+
+      print("event.user ${event.user.bookmarkedPosts}");
+
       if (event.isBookmarked) {
         event.post.isBookmarked?.remove(event.user.id);
       } else {

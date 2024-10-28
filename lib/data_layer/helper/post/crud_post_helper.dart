@@ -140,4 +140,12 @@ class CrudPostHelper {
     else
       await CrudPost.addBookmark(postId, userId, time);
   }
+
+  static Future<void> toggleBookmarkedModifed(
+      bool isBookmarked, String postId, String userId, Timestamp time) async {
+    if (isBookmarked)
+      await CrudPost.removedBookmarkModified(postId, userId);
+    else
+      await CrudPost.addBookmarkModifed(postId, userId, time);
+  }
 }
