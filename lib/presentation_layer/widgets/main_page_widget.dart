@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
-import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
@@ -31,8 +30,6 @@ class _MainpageWidgetState extends State<MainpageWidget> {
   void initState() {
     super.initState();
     // startTimer();
-    likeCount = List<int>.filled(20, 0);
-    isLiked = List<bool>.filled(20, false);
   }
 
   void dispose() {
@@ -298,8 +295,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10)),
                                 child: Image.network(
-                                  state.filteredPosts[index].contentImg ??
-                                      "null",
+                                  state.filteredPosts[index].contentImg,
                                   height: 150,
                                   fit: BoxFit.cover,
                                 ),
@@ -390,7 +386,7 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                                     .add(ToggleBookmarkEvent(
                                                         isBookmarked,
                                                         post,
-                                                        userState.user.id,
+                                                        userState.user,
                                                         Timestamp.now()));
                                               },
                                             );

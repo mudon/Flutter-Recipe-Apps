@@ -14,7 +14,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc() : super(PostInitial()) {
     on<GetPosts>((event, emit) async {
       posts = await FetchPostHelper.getPosts();
-
       emit(PostsLoaded(posts, false, posts, event.isIndex));
     });
 
@@ -50,6 +49,30 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
       }
 
       emit(LikePostsToggled());
+    });
+  }
+}
+
+class CommentBloc extends Bloc<CommentEvent, CommentState> {
+  CommentBloc() : super(CommentInitial()) {
+    on<AddComment>((event, emit) async {
+      /*
+      postId: String.
+
+      commentData:
+      {
+        time: TimeStamp,
+        userId: String,
+        comment: String,
+        name: String
+      }
+     */
+      Map<String, dynamic> updateCommentData =
+          await CrudPostHelper.addComment(event.post.id, event.commentData);
+
+      event.post.comments?.add(updateCommentData);
+
+      emit(Commented(updateCommentData));
     });
   }
 }

@@ -17,7 +17,7 @@ class GetUser extends UserEvent {
 class ToggleBookmarkEvent extends SavedPostEvent {
   bool isBookmarked;
   PostModel post;
-  String userId;
+  UserModel user;
   Timestamp time;
-  ToggleBookmarkEvent(this.isBookmarked, this.post, this.userId, this.time);
+  ToggleBookmarkEvent(this.isBookmarked, this.post, this.user, this.time);
 }

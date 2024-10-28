@@ -14,23 +14,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => PostBloc()..add(GetPosts(false)),
-        ),
-        BlocProvider(
-          create: (_) => UserBloc()..add(LoadUser()),
-        ),
-        BlocProvider(
-          create: (_) => SavedPostBloc(),
-        ),
-        BlocProvider(
-          create: (_) => LikePostBloc(),
-        )
-      ],
-      child: MainPageView(),
-    );
+    return MainPageView();
   }
 }
 
@@ -56,7 +40,7 @@ class _MainPageViewState extends State<MainPageView> {
 
   List<Widget> navigationPage = [
     const MainpageWidget(),
-    const userSavedRecipe(),
+    const UserSavedRecipe(),
     const Wheeler(),
   ];
 

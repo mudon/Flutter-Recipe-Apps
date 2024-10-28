@@ -23,3 +23,15 @@ class LikePostInitial extends LikePostState {}
 class LikePostLoading extends LikePostState {}
 
 class LikePostsToggled extends LikePostState {}
+
+abstract class CommentState {}
+
+class CommentInitial extends CommentState {}
+
+class CommentLoading extends CommentState {}
+
+class Commented extends CommentState {
+  Map<String, dynamic> updateCommentData;
+
+  Commented(this.updateCommentData);
+}

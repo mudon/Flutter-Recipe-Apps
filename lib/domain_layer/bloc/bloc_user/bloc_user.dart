@@ -25,13 +25,13 @@ class SavedPostBloc extends Bloc<SavedPostEvent, SavedPostState> {
   SavedPostBloc() : super(SavedPostInitial()) {
     on<ToggleBookmarkEvent>((event, emit) async {
       await CrudPostHelper.toggleBookmarked(
-          event.isBookmarked, event.post.id, event.userId, event.time);
+          event.isBookmarked, event.post.id, event.user.id, event.time);
 
       if (event.isBookmarked) {
-        event.post.isBookmarked?.remove(event.userId);
+        event.post.isBookmarked?.remove(event.user.id);
       } else {
-        event.post.isBookmarked?[event.userId] = {
-          "userId": event.userId,
+        event.post.isBookmarked?[event.user.id] = {
+          "userId": event.user.id,
           "time": event.time,
         };
       }

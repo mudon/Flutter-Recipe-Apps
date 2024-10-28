@@ -1,10 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:recipe_project/core/style/colors.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_state.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_event.dart';
+import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_state.dart';
+import 'package:recipe_project/presentation_layer/widgets/icon_button_recipe.dart';
 
 class RecipeDetail extends StatefulWidget {
   final PostModel instance;
@@ -22,6 +32,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late PostModel postInstance;
   late UserModel userInstance;
   TextEditingController commentController = TextEditingController();
+  List<Map<String, dynamic>> comments = [];
 
   @override
   void initState() {
@@ -31,6 +42,13 @@ class _RecipeDetailState extends State<RecipeDetail> {
     bahan = postInstance.bahan;
     penyediaan = postInstance.penyediaan;
     laluanGambar = postInstance.contentImg;
+    comments = List<Map<String, dynamic>>.from(postInstance.comments ?? []);
+  }
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    super.dispose();
   }
 
   Widget buildIngredientTiles(Map<String, List<String>> input) {
@@ -90,10 +108,36 @@ class _RecipeDetailState extends State<RecipeDetail> {
               title: Text("Maklumat"),
               expandedHeight: 400,
               actions: [
-                IconButton(
-                  icon: Icon(Icons.bookmark_border_rounded),
-                  onPressed: () {},
-                ),
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, userState) {
+                    if (userState is UserLoaded) {
+                      UserModel user = userState.user;
+
+                      return BlocBuilder<SavedPostBloc, SavedPostState>(
+                        builder: (context, savedPostState) {
+                          bool isBookmarked =
+                              postInstance.isBookmarked != null &&
+                                  postInstance.isBookmarked!
+                                      .containsKey(userState.user.id);
+                          return IconButtonRecipe(
+                            iconBefore: isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            onPressed: () {
+                              context.read<SavedPostBloc>().add(
+                                  ToggleBookmarkEvent(
+                                      isBookmarked,
+                                      postInstance,
+                                      userState.user,
+                                      Timestamp.now()));
+                            },
+                          );
+                        },
+                      );
+                    }
+                    return Container();
+                  },
+                )
               ],
               backgroundColor: Colors.amber,
               flexibleSpace: FlexibleSpaceBar(
@@ -207,34 +251,55 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     ),
                   ),
                 ),
-                IconButton.filledTonal(
-                  icon: Icon(Icons.arrow_upward),
-                  color: recipeColor.primary,
-                  onPressed: () {
-                    // dummyComments.add({
-                    //   "name": "maybe",
-                    //   "timestamp": "example",
-                    //   "comment": "comment"
-                    // });
+                BlocBuilder<UserBloc, UserState>(
+                  builder: (context, userState) {
+                    if (userState is UserLoaded) {
+                      UserModel user = userState.user;
 
-                    // CrudPostHelper.addComment(postInstance.id, {
-                    //   time: Timestamp.now(),
-                    //   userId: AuthService.user?.id,
-                    //   comment: commentController,
-                    //   name: user.name
-                    // });
-                    print("this.instance ${postInstance.comments}");
+                      return BlocBuilder<CommentBloc, CommentState>(
+                        builder: (context, commentState) {
+                          return IconButton.filledTonal(
+                            icon: Icon(Icons.arrow_upward),
+                            color: recipeColor.primary,
+                            onPressed: () {
+                              if (commentController.text.length != 0) {
+                                Map<String, dynamic> newComment = {
+                                  "time": Timestamp.now(),
+                                  "userId": userState.user.id,
+                                  "comment": commentController.text,
+                                  "name": userState.user.name
+                                };
+                                context.read<CommentBloc>().add(
+                                      AddComment(
+                                        postInstance,
+                                        newComment,
+                                      ),
+                                    );
+
+                                setState(() {
+                                  comments.add(newComment);
+                                });
+
+                                commentController.clear();
+                              }
+                            },
+                          );
+                        },
+                      );
+                    }
+                    return Container();
                   },
-                ),
+                )
               ]),
             ),
             SliverToBoxAdapter(
               child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: postInstance.comments?.length,
+                  itemCount: comments.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final comment = postInstance.comments?[index];
-
+                    final comment = comments[index];
+                    DateTime dateTime = comment["time"].toDate();
                     return Padding(
                       padding: EdgeInsets.all(10),
                       child: Row(
@@ -256,14 +321,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                   Row(
                                     children: [
                                       Text(
-                                        comment?["userName"],
+                                        comment["name"],
                                         style: TextStyle(fontSize: 25),
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
                                       Text(
-                                        comment?["time"],
+                                        DateFormat.yMMMMd('en_US')
+                                            .add_jm()
+                                            .format(dateTime),
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 18,
@@ -272,7 +339,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     ],
                                   ),
                                   Text(
-                                    comment?["comment"],
+                                    comment["comment"],
                                   )
                                 ],
                               ))

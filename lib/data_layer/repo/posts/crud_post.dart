@@ -20,7 +20,6 @@ class CrudPost {
         .collection("posts")
         .doc(postData["id"])
         .set(postData);
-
     PostModel.fromMap(postData);
   }
 
@@ -29,10 +28,23 @@ class CrudPost {
 
   static Future<void> addComment(
       String postId, Map<String, dynamic> commentData) async {
-    await DirectFirebase.firestoreDatabase
-        .collection("posts")
-        .doc(postId)
-        .set(commentData);
+    /*
+      postId: String.
+
+      commentData:
+      {
+        time: TimeStamp,
+        userId: String,
+        commentId: String,
+        comment: String,
+        name: String
+      }
+     */
+    DocumentReference commentsRef =
+        await DirectFirebase.firestoreDatabase.collection("posts").doc(postId);
+    await commentsRef.update({
+      'comments': FieldValue.arrayUnion([commentData])
+    });
   }
 
   static Future<void> removeComment() async {}

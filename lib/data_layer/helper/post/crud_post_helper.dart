@@ -76,7 +76,7 @@ class CrudPostHelper {
       "timePosted": Timestamp.now(),
       "likes": likesData,
       "comments": commentsData,
-      "isBookmarked": false,
+      "isBookmarked": {},
     };
 
     CrudPost.addPost(postData);
@@ -94,7 +94,7 @@ class CrudPostHelper {
     }
   }
 
-  static Future<void> addComment(
+  static Future<Map<String, dynamic>> addComment(
       String postId, Map<String, dynamic> commentData) async {
     /*
       postId: String.
@@ -103,12 +103,19 @@ class CrudPostHelper {
       {
         time: TimeStamp,
         userId: String,
-        commentId: String,
         comment: String,
-        userName: String
+        name: String
       }
      */
+
+    const uuid = Uuid();
+    String commentId = uuid.v1();
+
+    commentData["commentId"] = commentId;
+
     await CrudPost.addComment(postId, commentData);
+
+    return commentData;
   }
 
   static Future<void> removeComments() async {}

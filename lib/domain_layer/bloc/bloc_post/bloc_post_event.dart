@@ -25,3 +25,11 @@ class ToggleLike extends LikePostEvent {
   Timestamp time;
   ToggleLike(this.isLiked, this.post, this.userId, this.time);
 }
+
+abstract class CommentEvent {}
+
+class AddComment extends CommentEvent {
+  PostModel post;
+  Map<String, dynamic> commentData;
+  AddComment(this.post, this.commentData);
+}
