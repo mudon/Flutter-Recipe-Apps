@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/repo/posts/fetch_post.dart';
+import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 
 class FetchPostHelper {
   static Future<List<PostModel>> getPosts() async {
@@ -49,6 +50,29 @@ class FetchPostHelper {
         }
       }
     }
+    return posts;
+  }
+
+  static Future<List<PostModel>> getPostsByIds(List<String> postIds) async {
+    List<PostModel> posts = [];
+
+    try {
+      for (String postId in postIds) {
+        DocumentSnapshot<Map<String, dynamic>> snapshot = await DirectFirebase
+            .firestoreDatabase
+            .collection('posts')
+            .doc(postId)
+            .get();
+
+        if (snapshot.exists) {
+          posts.add(PostModel.fromMap(snapshot.data()!));
+        }
+      }
+    } catch (e) {
+      print("Error fetching posts by IDs: $e");
+      rethrow;
+    }
+
     return posts;
   }
 }

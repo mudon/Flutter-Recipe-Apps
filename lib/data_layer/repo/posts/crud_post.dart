@@ -99,9 +99,9 @@ class CrudPost {
       }
     }, SetOptions(merge: true));
 
-    await userRef.update({
-      'savedPosts': FieldValue.arrayUnion([postRef])
-    });
+    await userRef.set({
+      "bookmarkedPosts": {postId: postId}
+    }, SetOptions(merge: true));
   }
 
   static Future<void> removedBookmark(String postId, String? userId) async {
@@ -111,41 +111,6 @@ class CrudPost {
         DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
 
     await postRef.update({"isBookmarked.$userId": FieldValue.delete()});
-
-    await userRef.update({
-      'savedPosts': FieldValue.arrayRemove([postRef])
-    });
-  }
-
-  static Future<void> addBookmarkModifed(
-      String postId, String? userId, Timestamp time) async {
-    DocumentReference userRef =
-        DirectFirebase.firestoreDatabase.collection('user').doc(userId);
-    DocumentReference postRef =
-        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
-
-    // await postRef.set({
-    //   "isBookmarked": {
-    //     userId: {
-    //       "userId": userId,
-    //       "time": time,
-    //     }
-    //   }
-    // }, SetOptions(merge: true));
-
-    await userRef.set({
-      "bookmarkedPosts": {postId: postId}
-    }, SetOptions(merge: true));
-  }
-
-  static Future<void> removedBookmarkModified(
-      String postId, String? userId) async {
-    DocumentReference userRef =
-        DirectFirebase.firestoreDatabase.collection('user').doc(userId);
-    DocumentReference postRef =
-        DirectFirebase.firestoreDatabase.collection('posts').doc(postId);
-
-    // await postRef.update({"isBookmarked.$userId": FieldValue.delete()});
 
     await userRef.update({
       "bookmarkedPosts.${postId}": FieldValue.delete(),

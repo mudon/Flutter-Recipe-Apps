@@ -7,7 +7,6 @@ class UserModel {
   List<String> createdPosts;
   String email;
   String name;
-  List<PostModel>? savedPosts;
   Map<String, String>? bookmarkedPosts;
 
   UserModel(
@@ -16,7 +15,6 @@ class UserModel {
       required this.email,
       required this.name,
       required this.createdPosts,
-      this.savedPosts,
       this.bookmarkedPosts});
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -26,9 +24,6 @@ class UserModel {
       createdPosts: List<String>.from(map["createdPosts"]),
       email: map["email"],
       name: map["name"],
-      savedPosts: (map["savedPosts"] as List<dynamic>?)
-          ?.whereType<PostModel>()
-          .toList(),
       bookmarkedPosts: (map["bookmarkedPosts"] as Map<String, dynamic>?)?.map(
         (key, value) => MapEntry(key, value as String),
       ),

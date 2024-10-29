@@ -12,24 +12,12 @@ class FetchUserHelper {
 
       if (userSnapshot.exists) {
         Map<String, dynamic>? userData = userSnapshot.data();
-        List<PostModel> posts = [];
 
         if (userData != null) {
           // Convert createdPosts to a list of Strings if it exists
           if (userData["createdPosts"] != null) {
             userData["createdPosts"] =
                 List<String>.from(userData["createdPosts"]);
-          }
-
-          // Handle savedPosts fetching
-          if (userData["savedPosts"] != null &&
-              userData["savedPosts"].isNotEmpty) {
-            List<DocumentReference<Object?>> reTypeSavedPosts =
-                (userData["savedPosts"] as List)
-                    .cast<DocumentReference<Object?>>();
-            posts =
-                await FetchPostHelper.getPostsByReferences(reTypeSavedPosts);
-            userData["savedPosts"] = posts;
           }
 
           return UserModel.fromMap(userData);
