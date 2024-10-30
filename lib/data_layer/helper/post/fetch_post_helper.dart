@@ -75,4 +75,22 @@ class FetchPostHelper {
 
     return posts;
   }
+
+  static Stream<int> likeStream(String postId) async* {
+    try {
+      await for (var snapshot in DirectFirebase.firestoreDatabase
+          .collection('posts')
+          .doc(postId)
+          .snapshots()) {
+        if (snapshot.exists) {
+          yield snapshot.data()?["likes"]?.length ?? 0;
+        } else {
+          yield 0;
+        }
+      }
+    } catch (e) {
+      print("Error fetching posts by IDs: $e");
+      yield 0;
+    }
+  }
 }

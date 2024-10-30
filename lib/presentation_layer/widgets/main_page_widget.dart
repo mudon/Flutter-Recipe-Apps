@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:recipe_project/core/style/colors.dart';
+import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
+import 'package:recipe_project/data_layer/helper/user/fetch_user_helper.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
+import 'package:recipe_project/data_layer/repo/utils/direct_firebase.dart';
 import 'package:recipe_project/data_layer/services/auth_service.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post_event.dart';
@@ -82,6 +85,10 @@ class _MainpageWidgetState extends State<MainpageWidget> {
     }
 
     return carouselIndicator;
+  }
+
+  Stream<int> likeStream(String postId) {
+    return FetchPostHelper.likeStream(postId); // Return the stream directly
   }
 
   @override
@@ -341,25 +348,44 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                           }
                                           return Container();
                                         }),
-                                        BlocBuilder<UserBloc, UserState>(
-                                            builder: (context, userState) {
-                                          if (userState is UserLoaded) {
-                                            return BlocBuilder<LikePostBloc,
-                                                    LikePostState>(
-                                                builder:
-                                                    (context, likePostState) {
-                                              return Container(
-                                                child: Text(
-                                                  '${post.likes?.length}',
-                                                  style: TextStyle(
-                                                    fontSize: 23,
-                                                  ),
-                                                ),
+                                        StreamBuilder<int>(
+                                          stream: likeStream(post.id),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return CircularProgressIndicator(); // Show loading indicator
+                                            } else if (snapshot.hasError) {
+                                              return Text(
+                                                  'Error: ${snapshot.error}'); // Display error
+                                            } else if (snapshot.hasData) {
+                                              return BlocBuilder<UserBloc,
+                                                  UserState>(
+                                                builder: (context, userState) {
+                                                  if (userState is UserLoaded) {
+                                                    return BlocBuilder<
+                                                        LikePostBloc,
+                                                        LikePostState>(
+                                                      builder: (context,
+                                                          likePostState) {
+                                                        return Container(
+                                                          child: Text(
+                                                            '${snapshot.data ?? 0}', // Display the like count
+                                                            style: TextStyle(
+                                                                fontSize: 23),
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  }
+                                                  return Container(); // Handle other user states if necessary
+                                                },
                                               );
-                                            });
-                                          }
-                                          return Container();
-                                        }),
+                                            } else {
+                                              return Text(
+                                                  'No data available'); // Fallback for no data
+                                            }
+                                          },
+                                        ),
                                       ],
                                     ),
                                     Spacer(),
