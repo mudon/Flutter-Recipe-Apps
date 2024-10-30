@@ -87,10 +87,6 @@ class _MainpageWidgetState extends State<MainpageWidget> {
     return carouselIndicator;
   }
 
-  Stream<int> likeStream(String postId) {
-    return FetchPostHelper.likeStream(postId); // Return the stream directly
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -349,7 +345,8 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                                           return Container();
                                         }),
                                         StreamBuilder<int>(
-                                          stream: likeStream(post.id),
+                                          stream: FetchPostHelper.likeStream(
+                                              post.id),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.waiting) {

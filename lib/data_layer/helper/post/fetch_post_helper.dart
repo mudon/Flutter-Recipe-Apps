@@ -83,7 +83,7 @@ class FetchPostHelper {
           .doc(postId)
           .snapshots()) {
         if (snapshot.exists) {
-          yield snapshot.data()?["likes"]?.length ?? 0;
+          yield snapshot.data()?["likes"]?.length;
         } else {
           yield 0;
         }
