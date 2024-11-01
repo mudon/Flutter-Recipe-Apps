@@ -107,7 +107,37 @@ class _MainpageWidgetState extends State<MainpageWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [Text("Hiii 👋🏻"), Text(state.user.name)],
                     ),
-                    CircleAvatar()
+                    state.user.avatarImg.isNotEmpty
+                        ? CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(state.user.avatarImg),
+                          )
+                        : CircleAvatar(
+                            radius: 20,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: Container(
+                                  width: 13,
+                                  height: 13,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.blue[400],
+                                  ),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 10,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
