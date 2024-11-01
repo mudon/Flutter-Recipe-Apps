@@ -5,6 +5,7 @@ import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_user/bloc_user_state.dart';
+import 'package:recipe_project/presentation_layer/ui/recipe_detail_ui.dart';
 
 class UserSavedRecipe extends StatefulWidget {
   const UserSavedRecipe({super.key});
@@ -62,7 +63,11 @@ class _UserSavedRecipeState extends State<UserSavedRecipe> {
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                         child: GestureDetector(
                           onTap: () {
-                            // Navigate to the recipe details screen, if needed
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RecipeDetail(instance: post)));
                           },
                           child: Container(
                             width: double.infinity,
