@@ -93,4 +93,24 @@ class FetchPostHelper {
       yield 0;
     }
   }
+
+  static Stream<List<Map<String, dynamic>>> commentStream(
+      String postId) async* {
+    try {
+      await for (var snapshot in DirectFirebase.firestoreDatabase
+          .collection('posts')
+          .doc(postId)
+          .snapshots()) {
+        if (snapshot.exists) {
+          yield List<Map<String, dynamic>>.from(
+              snapshot.data()?["comments"] ?? []);
+        } else {
+          yield [];
+        }
+      }
+    } catch (e) {
+      print("Error fetching posts by IDs: $e");
+      yield [];
+    }
+  }
 }

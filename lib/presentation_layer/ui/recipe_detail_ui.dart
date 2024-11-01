@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:recipe_project/core/style/colors.dart';
+import 'package:recipe_project/data_layer/helper/post/fetch_post_helper.dart';
 import 'package:recipe_project/data_layer/models/post.dart';
 import 'package:recipe_project/data_layer/models/user.dart';
 import 'package:recipe_project/domain_layer/bloc/bloc_post/bloc_post.dart';
@@ -32,7 +33,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late PostModel postInstance;
   late UserModel userInstance;
   TextEditingController commentController = TextEditingController();
-  List<Map<String, dynamic>> comments = [];
 
   @override
   void initState() {
@@ -42,7 +42,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
     bahan = postInstance.bahan;
     penyediaan = postInstance.penyediaan;
     laluanGambar = postInstance.contentImg;
-    comments = List<Map<String, dynamic>>.from(postInstance.comments ?? []);
   }
 
   @override
@@ -276,10 +275,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                       ),
                                     );
 
-                                setState(() {
-                                  comments.add(newComment);
-                                });
-
                                 commentController.clear();
                               }
                             },
@@ -293,61 +288,73 @@ class _RecipeDetailState extends State<RecipeDetail> {
               ]),
             ),
             SliverToBoxAdapter(
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: comments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final comment = comments[index];
-                    DateTime dateTime = comment["time"].toDate();
-                    return Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        comment["name"],
-                                        style: TextStyle(fontSize: 25),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        DateFormat.yMMMMd('en_US')
-                                            .add_jm()
-                                            .format(dateTime),
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18,
+              child: StreamBuilder<List<Map<String, dynamic>>>(
+                stream: FetchPostHelper.commentStream(postInstance.id),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final comments = snapshot.data!;
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: comments.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final comment = comments[index];
+                        DateTime dateTime = comment["time"].toDate();
+
+                        return Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(),
+                              SizedBox(width: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          comment["name"],
+                                          style: TextStyle(fontSize: 25),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    comment["comment"],
-                                  )
-                                ],
-                              ))
-                        ],
-                      ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          DateFormat.yMMMMd('en_US')
+                                              .add_jm()
+                                              .format(dateTime),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      comment[
+                                          "comment"], // Accessing comment correctly
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     );
-                  }),
-            )
+                  } else if (snapshot.hasError) {
+                    return Text("Error loading comments");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),
