@@ -31,7 +31,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late String? laluanGambar;
   late String? name;
   late PostModel postInstance;
-  late UserModel userInstance;
   TextEditingController commentController = TextEditingController();
 
   @override
